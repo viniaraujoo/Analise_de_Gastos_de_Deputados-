@@ -1,0 +1,88 @@
+---
+title: "Analise_de_Gastos_de_Deputados"
+output: html_document
+autor: "Vinicius Brandão"
+---
+
+```{r}
+library(readr)
+library(tidyverse)
+```
+
+## 
+
+dvsyfhgsduihgfuysvtgefgvuiashdifsdf
+```{r}
+date <- read_csv("data/dadosCEAP.csv")
+```
+## Quais são os deputados que gastaram mais dinheiro da CEAP? Quais são os mais econômicos?
+
+```{r}
+gastadores <- date %>%
+              group_by(nomeParlamentar) %>%
+              summarise(total = sum(valorLíquido)) %>%
+              arrange(-total) %>%
+              slice(1:3)
+
+economistas <- date %>%
+              group_by(nomeParlamentar) %>%
+              summarise(total = sum(valorLíquido)) %>%
+              filter(total >= 0) %>%
+              arrange(total) %>%
+              slice(1:3)
+  
+parlamentares <- union(gastadores,economistas)
+
+parlamentares %>% ggplot(aes(x =  reorder(nomeParlamentar,total), y = total, ymax = total, ymin = 0)) + 
+   geom_point(size = 2) + 
+    geom_linerange(size = .3) +
+   coord_flip()
+
+```
+
+
+## Quais os estados cujos deputados gastam mais no exterior? Quais os estados cujos deputados gastam menos no exterior?
+
+```{r}
+viajados <- date %>%
+            filter(tipoDocumento == 2) %>%
+            group_by(nomeParlamentar) %>%
+              summarise(total = sum(valorLíquido)) %>%
+              arrange(-total) %>%
+              slice(1:3)
+
+naoviaja <- date %>%
+            filter(tipoDocumento == 2) %>%
+            group_by(nomeParlamentar) %>%
+              summarise(total = sum(valorLíquido)) %>%
+              arrange(total) %>%
+              slice(1:3)
+
+parlamentares <- union(viajados,naoviaja)
+
+parlamentares %>% ggplot(aes(x =  reorder(nomeParlamentar,total), y = total, ymax = total, ymin = 0)) + 
+   geom_point(size = 2) + 
+    geom_linerange(size = .3) +
+   coord_flip()
+```
+
+## Quais os partidos cujos parlamentares mais usam CEAP no estado da Paraíba? Quais são os que menos usam? Mesmas perguntas considerando valores em R$. 
+
+```{r}
+partidosgastadores <- date %>%
+                      filter(sgUF == "PB") %>%
+                      group_by(sgPartido) %>%
+                      summarise(total = sum(valorLíquido)) %>%
+                      arrange(-total)
+
+partidosgastadores %>% ggplot(aes(x =  reorder(sgPartido,total), y = total, ymax = total, ymin = 0)) + 
+   geom_point(size = 2) + 
+    geom_linerange(size = .3) +
+   coord_flip()
+```
+
+
+
+
+
+
