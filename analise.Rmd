@@ -64,7 +64,18 @@ parlamentares %>% ggplot(aes(x =  reorder(nomeParlamentar,total), y = total, yma
 
 ```
 
-Como podemos observar 
+Como podemos observar existe uma disparidade entre o que mais gastaram e o que menos gastaram, nesse caso observamos que não ficou muito intuitivo a visualização dos parlamentares que menos gastaram para iremos gerar um novo gráfico para observar a diferença.
+
+```{r}
+economistas %>%  ggplot(aes(x =  reorder(nomeParlamentar,total), y = total, ymax = total, ymin = 0)) + 
+   geom_point(size = 2) + 
+    geom_linerange(size = .3) +
+   coord_flip()
+
+```
+Como podemos observar o parlamentar camilo cola gastou um valor bem simbolico mais precisamente R$ 0.62 reais, já os demais gastaram algo entre R$ 10,00 - R$ 20,00, em linhas gerais a diferença entre o que menos gastou e o que mais gastou é algo entre R$ 1485078.31 um valor muito alto.
+
+
 
 ## Quais os estados cujos deputados gastam mais no exterior? Quais os estados cujos deputados gastam menos no exterior?
 
@@ -119,6 +130,7 @@ date %>%
     arrange(-total) %>%
     slice(1:5) %>%
     ggplot(aes(x = reorder(nomeParlamentar,total), y = total,ymax = total, ymin = 0)) + 
+    geom_hline(yintercept = 45612.53) +
    geom_point(size = 2) + 
     geom_linerange(size = .3) +
    coord_flip() 
