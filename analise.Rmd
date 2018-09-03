@@ -203,10 +203,10 @@ Observamos que o estado de São Paulo é o que mais gasta com esse tipo de despe
 Por outro lado, o estado do Amazonas é o segundo que mais gasta com esse tipo de despesa e tal estado só possui 8 parlamentares na câmara o que leva a uma investigação um pouco mais relevante para descobrir o porquê do valor tão alto.
 Para isso, vamos separar esse estado e observar o número de vezes que os seus parlamentares viajaram.
 ```{r}
-am <-  date %>% filter(tipoDespesa == "PASSAGENS AÉREAS", sgUF == "AM")
+am <-  date %>% filter(tipoDespesa == "PASSAGENS AÉREAS", sgUF == "AM") #Filtrando por tipo de despesa e estado desejado
 
-am <- am %>% group_by(nomeParlamentar,tipoDespesa) %>%
-      summarise(total = n())
+am <- am %>% group_by(nomeParlamentar,tipoDespesa) %>% #Agrupando por parlamentar 
+      summarise(total = n()) #Soma da quantidade de vezes dessa despesa por parlamentar 
 
 am %>% ggplot(aes(x =  reorder(nomeParlamentar,total), y = total, ymax = total, ymin = 0)) + 
    geom_point(size = 2) + 
@@ -232,9 +232,9 @@ Para responder essa pergunta, escolhi tais partidos:
 Tais partidos foram escolhidos considerando sua força política no pais e numero de parlamentares que o compõe.
 
 ```{r}
-partidos <- date %>% filter(sgPartido %in% c("PT","PSDB","PMDB")) 
+partidos <- date %>% filter(sgPartido %in% c("PT","PSDB","PMDB")) #Filtrando os 3 partidos escolhidos
 
-despesasCeap <- partidos %>% group_by(tipoDespesa) %>% summarise(count = n())
+despesasCeap <- partidos %>% group_by(tipoDespesa) %>% summarise(count = n()) # Contando a quantidade de vezes que a despesa foi requerida
 
 despesasCeap %>% ggplot(aes(x =  reorder(tipoDespesa,count), y = count, ymax = count, ymin = 0)) + 
    geom_point(size = 2) + 
@@ -246,7 +246,7 @@ Como podemos observar a despesa de "Emissão de bilhete Aéreo" como a despesa m
 Para descobrir o valor em real que tais despesas tiveram, veremos o gráfico abaixo:
 
 ```{r}
-despesasReais <- partidos %>% group_by(tipoDespesa) %>% summarise(total = sum(valorLíquido))
+despesasReais <- partidos %>% group_by(tipoDespesa) %>% summarise(total = sum(valorLíquido)) # Selecionando a despesa e a soma de gasto por ela.
 
 despesasReais %>% ggplot(aes(x =  reorder(tipoDespesa,total), y = total, ymax = total, ymin = 0)) + 
    geom_point(size = 2) + 
