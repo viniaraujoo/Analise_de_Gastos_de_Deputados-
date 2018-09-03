@@ -68,13 +68,13 @@ gastadores <- date %>%
               slice(1:3) # Retirando o top 3.
 
 economistas <- date %>%
-              group_by(nomeParlamentar) %>%
-              summarise(total = sum(valorLíquido)) %>%
-              filter(total >= 0) %>%
-              arrange(total) %>%
-              slice(1:3)
+              group_by(nomeParlamentar) %>% #Agrupando por nome
+              summarise(total = sum(valorLíquido)) %>% #Criando a o valor total referendo aos gastos
+              filter(total >= 0) %>% # Filtrando os valores negativos
+              arrange(total) %>% # Ordenado do menor para o maior
+              slice(1:3) # Retirando o top 3.
   
-parlamentares <- full_join(gastadores,economistas)
+parlamentares <- full_join(gastadores,economistas) #Dando merge nos dois dataset
 
 parlamentares %>% ggplot(aes(x =  reorder(nomeParlamentar,total), y = total, ymax = total, ymin = 0)) + 
    geom_point(size = 2) + 
@@ -101,10 +101,10 @@ Para responder essa pergunta iremos observar o gasto com essa despesa consideran
 
 ```{r}
 estadoExterior <- date %>%
-            filter(tipoDocumento == 2) %>%
-            group_by(sgUF) %>%
-              summarise(total = sum(valorLíquido)) %>%
-              arrange(-total)
+            filter(tipoDocumento == 2) %>% #Filtrando pelo tipo de documento 2 == Despesa exterior
+            group_by(sgUF) %>% # Filtrando por Estado
+              summarise(total = sum(valorLíquido)) %>% #Criando a o valor total referendo aos gastos daquele tipo de despesa
+              arrange(-total) # Ordenado do maior para o menor
               
 
 
@@ -122,10 +122,10 @@ Uma curiosidade refere-se ao estado do Maranhão que menos gastou, onde as despe
 Para essa pergunta iremos filtrar todas as despesas relacionado a parlamentares do estado da Paraíba e assim vê de acordo com os partidos quais mais gastou.
 ```{r}
 partidosgastadores <- date %>%
-                      filter(sgUF == "PB") %>%
-                      group_by(sgPartido) %>%
-                      summarise(total = sum(valorLíquido)) %>%
-                      arrange(-total)
+                      filter(sgUF == "PB") %>% # Filtrando pelo estado da PB
+                      group_by(sgPartido) %>% # Agrupando por partido
+                      summarise(total = sum(valorLíquido)) %>% #Criando a o valor total referendo aos gastos
+                      arrange(-total) # Ordenado do maior para o menor
 
 partidosgastadores %>% ggplot(aes(x =  reorder(sgPartido,total), y = total, ymax = total, ymin = 0)) + 
    geom_point(size = 2) + 
@@ -140,9 +140,9 @@ Iremos analisar o porquê de toda essa diferença, uma das coisas que analisamos
 Para observar o número de candidatos observamos está tabela e vê como anda a distribuição desse.
 ```{r}
 date %>%
-     filter(sgUF == "PB") %>%
-      group_by(sgPartido,nomeParlamentar) %>%
-      summarise(count = n())
+     filter(sgUF == "PB") %>% # Filtrando pelo estado da PB
+      group_by(sgPartido,nomeParlamentar) %>% # Agrupando por nome e partido do candidato
+      summarise(count = n()) # Contando quantas requisiões de despesas 
 ```
 
 Como podemos observar o partido do PMDB possui um número maior de parlamentares em consequentemente ele teria um número maior de gastos mesmo já que 30 % dos parlamentares são deste partido.
@@ -153,19 +153,19 @@ Para isso iremos vericar quais candidatos ultrapassaram o total que refere-se a 
 ```{r}
 date %>%
   group_by(sgUF,idCadastro,year_month,          
-           nomeParlamentar,limite_mensal) %>%   
-  summarise(total = sum(valorLíquido)) %>% 
-  filter(year_month != "NA-NA") %>%  
-  filter(total > limite_mensal) %>%  
-  ungroup()  -> candidatos_mes_ano
+           nomeParlamentar,limite_mensal) %>%   #Agrupando por Estado,idCadastro,Mês-Ano,Nome do parlamentar e Limite Mensal
+  summarise(total = sum(valorLíquido)) %>%  #Criando a o valor total referendo aos gastos
+  filter(year_month != "NA-NA") %>%  # Retirando os Mês-Ano == "NA-NA"
+  filter(total > limite_mensal) %>%  # Filtrando os parlamentares que ultrapassaram seu limite mensal por mês
+  ungroup()  -> candidatos_mes_ano # Atribuindo ao data set candidatos_mes_ano
 
 candidatos_mes_ano %>%
-  group_by(idCadastro,nomeParlamentar) %>% 
-  arrange(desc(total)) %>%   
+  group_by(idCadastro,nomeParlamentar) %>% # Agrupando pelo id e nome do parlamentar
+  arrange(desc(total)) %>%   #Ordenando do maior para o menor
   slice(1) %>%                         
   ungroup() %>%
-  top_n(n=5, wt=total) %>%  
-  mutate(diferenca = total - limite_mensal) %>% 
+  top_n(n=5, wt=total) %>%  #Selecionando um top 5
+  mutate(diferenca = total - limite_mensal) %>% # Variavel diferença se refe a difereça entre o limite mensal e o total gasto no mês.
   ggplot(aes(diferenca,
              reorder(nomeParlamentar,
                      diferenca))) +
