@@ -187,9 +187,9 @@ O pastor eurico chega ultrapassa a quantia de R$180.000,00 referente a um único
 ## Quais estados cujos parlamentares gastam mais com passagens aéreas?
 
 ```{r}
-estadosviajados <- date %>% filter(tipoDespesa == "PASSAGENS AÉREAS") %>% 
-                   group_by(sgUF) %>%
-                    summarise(total = sum(valorLíquido)) %>% na.omit() 
+estadosviajados <- date %>% filter(tipoDespesa == "PASSAGENS AÉREAS") %>%  # Filtrando por despesa do tipo passagem area
+                   group_by(sgUF) %>% # Filtrando por estado
+                    summarise(total = sum(valorLíquido)) %>% na.omit()  # Soma do total de gasto com passagem por estado omitindo NA
         
 estadosviajados %>% ggplot(aes(x =  reorder(sgUF,total), y = total, ymax = total, ymin = 0)) + 
    geom_point(size = 2) + 
