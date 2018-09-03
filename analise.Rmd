@@ -12,9 +12,9 @@ options(scipen = 999)
 ```
  
 ## Descrição do Problema
-Analise realisada para a disciplina de Ciência de dados Predativa (Periodo: 2018.2) e tem como principal objetivo responder determinadas perguntas sobre o conjunto de dados referentes a gastos de deputados relacionados a atividade parlamentar utilizando o CEAP(cota para o exercício da atividade parlamentar).
+Analise realizada para a disciplina de Ciência de dados Preditiva (Periodo: 2018.2) e tem como principal objetivo responder determinadas perguntas sobre o conjunto de dados referentes a gastos de deputados relacionados a atividade parlamentar utilizando o CEAP(cota para o exercício da atividade parlamentar).
 
-**Ceap:**  É uma cota única mensal destinada a custear os gastos dos deputados exclusivamente vinculados ao exercício da atividade parlamentar. Exemplos de despesa desse tipo são: passagens aéreas, telefonia, serviços postais, manutenção de escritórios de apoio à atividade parlamentar, assinatura de publicações, fornecimento de alimentação ao parlamentar, hospedagem, outras despesas com locomoção, contemplando locação ou fretamento de aeronaves, veículos automotores e embarcações, serviços de táxi, pedágio e estacionamento e passagens terrestres.
+**Ceap:** É uma cota única mensal destinada a custear os gastos dos deputados exclusivamente vinculados ao exercício da atividade parlamentar. Exemplos de despesa desse tipo são: passagens aéreas, telefonia, serviços postais, manutenção de escritórios de apoio à atividade parlamentar, assinatura de publicações, fornecimento de alimentação ao parlamentar, hospedagem, outras despesas com locomoção, contemplando locação ou fretamento de aeronaves, veículos automotores e embarcações, serviços de táxi, pedágio, estacionamento e passagens terrestres.
 
 ### Perguntas a ser respondidas na analise:
 1. Quais são os deputados que gastaram mais dinheiro da CEAP? Quais são os mais econômicos?
@@ -25,7 +25,7 @@ Analise realisada para a disciplina de Ciência de dados Predativa (Periodo: 201
 6. Escolha três partidos e responda: Quais são os tipos de despesa mais utilizados no uso da CEAP pelos deputados desses partidos? Mesma pergunta considerando valores em R$.
 
 ### Descrição dos dados
- Os dados foram coletados do site de transparência da Câmara e foram tratados.Também foi considerado um conjunto de dados contendo o limite do CEAP por estado.
+Os dados foram coletados do site de transparência da Câmara e foram tratados. Também foi considerado um conjunto de dados contendo o limite do CEAP por estado.
 ```{r}
 date <- read_csv(here::here("date/dadosCEAP.csv"),
                  progress = F,
@@ -83,9 +83,8 @@ parlamentares %>% ggplot(aes(x =  reorder(nomeParlamentar,total), y = total, yma
 
 ```
 
-Observamos os 3 parlamentares que mais gastaram vemos que suas despesas ultrapassam 1 milhão de reais, sendo assim, considerando um salario bruto de R$ 26.723,12 podemos observar que só em cota parlamentar tais parlamentares chegaram a gastar cerca de 55 vezes mais do que seu salario bruto.
+Observamos os 3 parlamentares que mais gastaram vemos que as suas despesas ultrapassam 1 milhão de reais, sendo assim, considerando um salário bruto de R$ 26.723,12 podemos observar que só em cota parlamentar tais parlamentares chegaram a gastar cerca de 55 vezes mais do que seu salário bruto.
 Como podemos observar existe uma disparidade entre o que mais gastaram e o que menos gastaram, nesse caso observamos que não ficou muito intuitivo a visualização dos parlamentares que menos gastaram para iremos gerar um novo gráfico para observar a diferença.
-
 ```{r}
 economistas %>%  ggplot(aes(x =  reorder(nomeParlamentar,total), y = total, ymax = total, ymin = 0)) + 
    geom_point(size = 2) + 
@@ -93,11 +92,11 @@ economistas %>%  ggplot(aes(x =  reorder(nomeParlamentar,total), y = total, ymax
    coord_flip()
 
 ```
-Como podemos observar o parlamentar camilo cola gastou um valor bem simbolico mais precisamente R$ 0.62 reais, já os demais gastaram algo entre R$ 10,00 - R$ 20,00, em linhas gerais a diferença entre o que menos gastou e o que mais gastou é algo entre R$ 1485078.31 um valor bem alto.
-Com isso podemos observar que existe uma difreça de gasto considerado entre os parlamentares.
+Como podemos observar o parlamentar camilo cola gastou um valor bem simbólico mais precisamente R$ 0.62 reais, já os demais gastaram algo entre R$ 10,00 - R$ 20,00, em linhas gerais a diferença entre o que menos gastou e o que mais gastou é algo entre R$ 1485078.31 (um) valor bem alto.
+Com isso podemos observar que existe uma diferença de gasto considerado entre os parlamentares.
 
 ## Quais os estados cujos deputados gastam mais no exterior? Quais os estados cujos deputados gastam menos no exterior?
-Para responder essa pergunta iremos obserar o gasto com essa depesas consirando o seu tipo, para essa pergunta iremos utiliza o tipoDocumento = 2, onde refre-se a despesas no exterior, e assim considerando os estados para observar qual o que mais gastou com essas despesas.
+Para responder essa pergunta iremos observar o gasto com essa despesa considerando o seu tipo, para essa pergunta iremos utiliza o tipoDocumento = 2, onde se refere a despesa no exterior, e assim considerando os estados para observar qual o que mais gastou com essas despesas.
 
 ```{r}
 estadoExterior <- date %>%
@@ -114,10 +113,9 @@ estadoExterior %>% ggplot(aes(x =  reorder(sgUF,total), y = total, ymax = total,
    coord_flip()
 ```
 
-Como podemos observar o estado de São Paulo é o que mais gasta com esse tipo de despesas, um valor quase 2050 vezes maior do que Maranhão que é o estado que menos gastou com esse tipo de despesa. Desse modo, podemos obserar que a soma total dessas despesas chega ao valor de R$ 810.000,00 um valor bem alto considerando.
-Relacionado ao assunto encontramos denuncias já realizadas e reportada onde foram encontrado dispesas relacionado a compras em Las Vega, já denunciada pelo software chamado serenata do amor, sendo assim observamos que tais dispesas nem sempre refere-se á algo que realmente relacionado as atividades parlamentares, tais informações podem ser encontradas detalhada [aqui](http://g1.globo.com/distrito-federal/noticia/2016/10/programa-para-vigiar-gastos-de-politicos-flagra-compra-em-las-vegas.html)
-Uma curiosidade refere-se ao estado do maranhão que menos gastou, onde as despesas refre-se a fast-food.
-
+Como podemos observar o estado de São Paulo é o que mais gasta com esse tipo de despesas, um valor quase 2050 vez maior do que Maranhão que é o estado que menos gastou com esse tipo de despesa. Desse modo, podemos observar que a soma total dessas despesas chega ao valor de R$ 810.000,00 (um) valor bem alto considerando.
+Relacionado ao assunto encontramos denuncias já realizadas e reportada onde foram encontrados despesas relacionado a compras em Las Vega, já denunciada pelo software chamado serenata do amor, sendo assim observamos que tais dispersas nem sempre se refere a algo que realmente relacionado as atividades parlamentares, tais informações podem ser encontradas detalhada [aqui](http://g1.globo.com/distrito-federal/noticia/2016/10/programa-para-vigiar-gastos-de-politicos-flagra-compra-em-las-vegas.html)
+Uma curiosidade refere-se ao estado do Maranhão que menos gastou, onde as despesas se refere a fast-food.
 ## Quais os partidos cujos parlamentares mais usam CEAP no estado da Paraíba? Quais são os que menos usam? Mesmas perguntas considerando valores em R$. 
 
 Para essa pergunta iremos filtrar todas as despesas relacionado a parlamentares do estado da Paraíba e assim vê de acordo com o partidos quais mais gastou.
