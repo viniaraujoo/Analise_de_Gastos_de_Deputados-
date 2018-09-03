@@ -182,7 +182,7 @@ candidatos_mes_ano %>%
 ```
 
 Podemos observar 5 parlamentares que ultrapassaram os valores do CEAP referente ao seu estado em único mês, sendo assim observamos que todos os 5 ultrapassam a quantia de R$ 140.000,00 reais em relação ao limite do seu respectivo estado.
-O pastor eurico chega ultrapassa a quantia de R$180.000,00 referente a um único mês o limite do ceap do seu estado de Pernambuco que é o valor de R$ 41.676,80
+O pastor eurico chega ultrapassa a quantia de RS 180.000,00 referente a um único mês o limite do ceap do seu estado de Pernambuco que é o valor de  R$ 41.676,80
 
 ## Quais estados cujos parlamentares gastam mais com passagens aéreas?
 
